@@ -2,10 +2,10 @@
 
 import Foundation
 
-/// Film object from JSON
+/// Film model
 struct Film: Codable {
     let page: Int
-    let results: [Result]
+    let results: [FilmResult]
     let totalPages, totalResults: Int
 
     enum CodingKeys: String, CodingKey {
@@ -15,8 +15,8 @@ struct Film: Codable {
     }
 }
 
-/// Result array from JSOn
-struct Result: Codable {
+/// Model of film results
+struct FilmResult: Codable {
     let adult: Bool
     let backdropPath: String
     let genreIDS: [Int]

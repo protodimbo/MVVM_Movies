@@ -34,6 +34,18 @@ final class DetailViewController: UIViewController {
         return text
     }()
 
+    var viewModel: DetailViewModelType? {
+        willSet(viewModel) {
+            guard let viewModel = viewModel else { return }
+            titleLabel.text = viewModel.title
+            infoTextView.text = viewModel.info
+        }
+    }
+
+    weak var coordinator: MainCoordinator?
+    var networkService: NetworkService?
+    var photoService: PhotoService?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

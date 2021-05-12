@@ -5,6 +5,16 @@ import UIKit
 /// Custom table view cell
 final class FilmTableViewCell: UITableViewCell {
     static let identifier = "FilmTableViewCell"
+    weak var viewModel: TableViewCellViewModelType? {
+        willSet(viewModel) {
+            guard let viewModel = viewModel else { return }
+            filmImageView.image = viewModel.filmImage
+            filmNameTextView.text = viewModel.filmName
+            starImageView.image = viewModel.heartImage
+            ratingLabel.text = viewModel.stringVoteAverage
+            dateLabel.text = "Вышел: \(viewModel.releaseDate.replacingOccurrences(of: "-", with: "/"))"
+        }
+    }
 
     private let filmImageView: UIImageView = {
         let imageView = UIImageView()
@@ -51,11 +61,6 @@ final class FilmTableViewCell: UITableViewCell {
         return label
     }()
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(filmImageView)
@@ -75,26 +80,5 @@ final class FilmTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
         selectionStyle = .none
-    }
-
-    func configureCell(
-        filmImageLink: String,
-        filmName: String,
-        starText: String,
-        ratingText: String,
-        dateString: String
-    ) {
-        DispatchQueue.global().async {
-            guard let imageURL = URL(string: "https://image.tmdb.org/t/p/w500\(filmImageLink)") else { return }
-            guard let data = try? Data(contentsOf: imageURL) else { return }
-
-            DispatchQueue.main.async {
-                self.filmImageView.image = UIImage(data: data)
-                self.filmNameTextView.text = filmName
-                self.ratingLabel.text = ratingText
-                self.starImageView.image = UIImage(named: starText)
-                self.dateLabel.text = "Вышел: \(dateString.replacingOccurrences(of: "-", with: "/"))"
-            }
-        }
     }
 }
