@@ -9,9 +9,9 @@ import UIKit
 
 protocol TableViewCellViewModelType: AnyObject {
     var voteAverage: Double { get }
-    var filmImage: UIImage { get }
+    var filmImage: UIImage? { get }
     var filmName: String { get }
     var stringVoteAverage: String { get }
     var releaseDate: String { get }
-    var heartImage: UIImage { get }
+    var heartImage: UIImage? { get }
 }

@@ -8,7 +8,7 @@
 import UIKit
 
 final class MainCoordinator: Coordinator {
-    var assemblyBuilder: AssemblyBuilderProtocol?
+    private var assemblyBuilder: AssemblyBuilderProtocol
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
 
@@ -18,18 +18,13 @@ final class MainCoordinator: Coordinator {
     }
 
     func start() {
-        guard let mainViewController = assemblyBuilder?.createMainModule(coordinator: self) else { return }
+        let mainViewController = assemblyBuilder.createMainModule(coordinator: self)
         navigationController.pushViewController(mainViewController, animated: false)
     }
 
-    func toDetail(viewModel: DetailViewModelType) {
-        guard let detailViewController = assemblyBuilder?
-            .createDetailModule(coordinator: self, viewModel: viewModel) as? DetailViewController else { return }
-//        detailViewController.configure(
-//            posterName: filmResult.posterPath,
-//            title: filmResult.title,
-//            info: filmResult.overview
-//        )
+    func toDetail(film: FilmResult?) {
+        let detailViewController = assemblyBuilder
+            .createDetailModule(film: film)
         navigationController.pushViewController(detailViewController, animated: true)
     }
 }

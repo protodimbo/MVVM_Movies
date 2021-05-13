@@ -8,17 +8,14 @@
 import Foundation
 
 /// Movie categories for request
-enum MovieCategory: String {
-    case latest
-    case nowPlaying
-    case popular
-    case topRated
-    case upcoming
+enum MovieCategory: String, CaseIterable {
+    case nowPlaying = "Now Playing"
+    case popular = "Popular"
+    case topRated = "Top Rated"
+    case upcoming = "Upcoming"
 
     var correctName: String {
         switch self {
-        case .latest:
-            return "latest"
         case .nowPlaying:
             return "now_playing"
         case .popular:

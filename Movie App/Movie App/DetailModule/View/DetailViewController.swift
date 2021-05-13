@@ -9,67 +9,73 @@ import UIKit
 
 /// Detail vc
 final class DetailViewController: UIViewController {
-    private let posterImage: UIImageView = {
-        let image = UIImageView()
-        image.contentMode = .scaleAspectFit
-        image.frame = CGRect(x: 40, y: 90, width: 310, height: 500)
-        return image
-    }()
+    private var viewModel: DetailPhotoViewModelType?
 
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
-        label.textAlignment = .center
-        label.frame = CGRect(x: 50, y: 580, width: 310, height: 30)
-        return label
-    }()
-
-    private let infoTextView: UITextView = {
-        let text = UITextView()
-        text.isEditable = false
-        text.isScrollEnabled = true
-        text.font = UIFont.systemFont(ofSize: 18, weight: .regular)
-        text.textAlignment = .center
-        text.frame = CGRect(x: 5, y: 610, width: 380, height: 200)
-        return text
-    }()
-
-    var viewModel: DetailViewModelType? {
-        willSet(viewModel) {
-            guard let viewModel = viewModel else { return }
-            titleLabel.text = viewModel.title
-            infoTextView.text = viewModel.info
-        }
-    }
-
-    weak var coordinator: MainCoordinator?
-    var networkService: NetworkService?
-    var photoService: PhotoService?
+    private var detailTableView = DetailView(frame: .zero)
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        configureVC()
+        detailTableView.delegate = self
+        view = detailTableView
+        title = viewModel?.film?.originalTitle
+        getPosters()
     }
 
-    func configure(posterName: String, title: String, info: String) {
-        DispatchQueue.global().async {
-            guard let imageURL = URL(string: "https://image.tmdb.org/t/p/original\(posterName)") else { return }
-            guard let data = try? Data(contentsOf: imageURL) else { return }
-
-            DispatchQueue.main.async {
-                self.posterImage.image = UIImage(data: data)
-                self.titleLabel.text = title
-                self.infoTextView.text = info
-            }
+    private func getPosters() {
+        viewModel?.getPosters { [weak self] in
+            self?.detailTableView.detailTableView.reloadData()
         }
     }
 
-    private func configureVC() {
-        view.backgroundColor = .systemBackground
-        view.addSubview(posterImage)
-        view.addSubview(titleLabel)
-        view.addSubview(infoTextView)
+    func inject(viewModel: DetailPhotoViewModelType) {
+        self.viewModel = viewModel
+    }
+}
+
+// MARK: - MovieDetailsViewDelegate
+
+extension DetailViewController: DetailViewDelegate {
+    func setupTableViewDelegate() -> UITableViewDelegate {
+        self
+    }
+
+    func setupTableViewDataSource() -> UITableViewDataSource {
+        self
+    }
+}
+
+extension DetailViewController: UITableViewDelegate {}
+extension DetailViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        3
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.row {
+        case 0:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: DetailPhotosScrollViewTableViewCell.identifier,
+                for: indexPath
+            ) as? DetailPhotosScrollViewTableViewCell,
+                let photoViewModel = viewModel else { return UITableViewCell() }
+            cell.configure(images: photoViewModel.images)
+            return cell
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: DetailTitleTableViewCell.identifier,
+                for: indexPath
+            ) as? DetailTitleTableViewCell, let viewModel = viewModel else { return UITableViewCell() }
+            cell.configure(text: viewModel.film?.title)
+            return cell
+        case 2:
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: DetailInfoTableViewCell.identifier,
+                for: indexPath
+            ) as? DetailInfoTableViewCell, let viewModel = viewModel else { return UITableViewCell() }
+            cell.configure(text: viewModel.film?.overview)
+            return cell
+        default:
+            return UITableViewCell()
+        }
     }
 }

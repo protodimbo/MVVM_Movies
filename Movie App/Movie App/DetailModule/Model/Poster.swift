@@ -13,9 +13,13 @@ struct Poster: Codable {
     let backdrops: [Posters]
 }
 
-/// MOdel for posters
+/// Model for posters
 struct Posters: Codable {
-    let filmId: Int
     let aspectRatio: Double
     let filePath: String
+
+    enum CodingKeys: String, CodingKey {
+        case aspectRatio = "aspect_ratio"
+        case filePath = "file_path"
+    }
 }

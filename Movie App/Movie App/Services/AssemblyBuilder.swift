@@ -9,23 +9,24 @@ import UIKit
 
 protocol AssemblyBuilderProtocol {
     func createMainModule(coordinator: MainCoordinator) -> UIViewController
-    func createDetailModule(coordinator: MainCoordinator, viewModel: DetailViewModelType) -> UIViewController
+    func createDetailModule(film: FilmResult?) -> UIViewController
     // TODO: Replace MAinCoordinator with coordinator
 }
 
 final class AssemblyModuleBuilder: AssemblyBuilderProtocol {
+    private let networkService = NetworkService()
+    private let photoService = PhotoService()
+
     func createMainModule(coordinator: MainCoordinator) -> UIViewController {
         let view = MainViewController()
         view.coordinator = coordinator
         return view
     }
 
-    func createDetailModule(coordinator: MainCoordinator, viewModel: DetailViewModelType) -> UIViewController {
+    func createDetailModule(film: FilmResult?) -> UIViewController {
         let view = DetailViewController()
-        let networkService = NetworkService()
-        view.networkService = networkService
-        view.photoService = PhotoService()
-        view.viewModel = viewModel
+        let viewModel = DetailPhotoViewModel(networkService: networkService, photoService: photoService, film: film)
+        view.inject(viewModel: viewModel)
         return view
     }
 }

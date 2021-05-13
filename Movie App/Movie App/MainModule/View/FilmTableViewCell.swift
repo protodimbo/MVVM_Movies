@@ -22,8 +22,6 @@ final class FilmTableViewCell: UITableViewCell {
         imageView.layer.cornerRadius = 8
         imageView.clipsToBounds = true
         imageView.layer.masksToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.frame = CGRect(x: 15, y: 15, width: 120, height: 160)
         return imageView
     }()
 
@@ -32,31 +30,23 @@ final class FilmTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         label.textAlignment = .left
         label.isUserInteractionEnabled = false
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.frame = CGRect(x: 150, y: 15, width: 220, height: 80)
         return label
     }()
 
     private let starImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.frame = CGRect(x: 150, y: 100, width: 170, height: 40)
         return imageView
     }()
 
     private let ratingLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 25, weight: .medium)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.frame = CGRect(x: 330, y: 100, width: 53, height: 40)
         return label
     }()
 
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.frame = CGRect(x: 150, y: 145, width: 213, height: 25)
         label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
         return label
     }()
@@ -68,6 +58,7 @@ final class FilmTableViewCell: UITableViewCell {
         contentView.addSubview(starImageView)
         contentView.addSubview(ratingLabel)
         contentView.addSubview(dateLabel)
+        layoutConstraints()
     }
 
     @available(*, unavailable)
@@ -80,5 +71,71 @@ final class FilmTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
         selectionStyle = .none
+    }
+
+    private func layoutConstraints() {
+        layoutFilmImageViewConstraints()
+        layoutFilmNameTextViewConstraints()
+        layoutStarImageViewConstraints()
+        layoutRatingLabelConstraints()
+        layoutDateLabelConstraints()
+    }
+
+    private func layoutFilmImageViewConstraints() {
+        filmImageView.anchor(
+            top: contentView.topAnchor,
+            bottom: contentView.bottomAnchor,
+            leading: contentView.leadingAnchor,
+            trailing: filmNameTextView.leadingAnchor,
+            paddingTop: 5,
+            paddingBottom: 5,
+            paddingLeading: 5,
+            paddingTrailing: 5,
+            width: 150
+        )
+    }
+
+    private func layoutFilmNameTextViewConstraints() {
+        filmNameTextView.anchor(
+            top: contentView.topAnchor,
+            bottom: starImageView.topAnchor,
+            trailing: contentView.trailingAnchor,
+            paddingTop: 5,
+            paddingBottom: 5,
+            paddingTrailing: 5
+        )
+    }
+
+    private func layoutStarImageViewConstraints() {
+        starImageView.anchor(
+            bottom: dateLabel.topAnchor,
+            leading: filmImageView.trailingAnchor,
+            trailing: ratingLabel.leadingAnchor,
+            paddingBottom: 5,
+            paddingLeading: 5,
+            paddingTrailing: 5
+        )
+    }
+
+    private func layoutRatingLabelConstraints() {
+        ratingLabel.anchor(
+            top: filmNameTextView.bottomAnchor,
+            bottom: dateLabel.topAnchor,
+            trailing: contentView.trailingAnchor,
+            paddingTop: 5,
+            paddingBottom: 5,
+            paddingTrailing: 5
+        )
+    }
+
+    private func layoutDateLabelConstraints() {
+        dateLabel.anchor(
+            bottom: contentView.bottomAnchor,
+            leading: filmImageView.trailingAnchor,
+            trailing: contentView.trailingAnchor,
+            paddingBottom: 5,
+            paddingLeading: 5,
+            paddingTrailing: 5
+        )
     }
 }

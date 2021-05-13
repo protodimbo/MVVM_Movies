@@ -8,12 +8,12 @@
 import Foundation
 
 protocol MainViewModelType {
+    var films: [FilmResult]? { get set }
     func nuberOfRows() -> Int
     func cellViewModel(indexPath: IndexPath) -> TableViewCellViewModelType?
 
-    func viewModelForSelectedRow() -> DetailViewModelType?
     func selectRow(at indexPath: IndexPath)
-    func getFilm(completion: @escaping () -> ())
+    func getFilm(category: MovieCategory, completion: @escaping () -> ())
 
     init(networkService: NetworkServiceProtocol)
 }

@@ -19,14 +19,13 @@ final class MainViewController: UITableViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(FilmTableViewCell.self, forCellReuseIdentifier: FilmTableViewCell.identifier)
-        //  fetchData()
         title = "Netflix"
         navigationController?.navigationBar.prefersLargeTitles = true
         viewModel = MainViewModel(networkService: NetworkService())
     }
 
     private func getFilm() {
-        viewModel?.getFilm { [weak self] in
+        viewModel?.getFilm(category: .nowPlaying) { [weak self] in
             self?.tableView.reloadData()
         }
     }
@@ -51,10 +50,53 @@ final class MainViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let viewModel = viewModel else { return }
-        viewModel.selectRow(at: indexPath)
-        guard let viewModelForSelected = viewModel.viewModelForSelectedRow() else { return }
+        coordinator?.toDetail(film: viewModel?.films?[indexPath.row])
+    }
 
-        coordinator?.toDetail(viewModel: viewModelForSelected)
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let categoryView = CategoryView()
+        categoryView.delegate = self
+        categoryView.config()
+        return categoryView
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        50
+    }
+}
+
+extension MainViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        MovieCategory.allCases.count
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: CategoryCollectionViewCell.identifier,
+            for: indexPath
+        ) as? CategoryCollectionViewCell
+        cell?.setup(text: MovieCategory.allCases[indexPath.row].rawValue)
+        return cell ?? UICollectionViewCell()
+    }
+}
+
+extension MainViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewModel?.getFilm(category: MovieCategory.allCases[indexPath.row]) { [weak self] in
+            self?.tableView.reloadData()
+        }
+    }
+}
+
+extension MainViewController: CategoryViewDelegate {
+    func setupCollectionViewDelegate() -> UICollectionViewDelegate {
+        self
+    }
+
+    func setupCollectionViewDataSource() -> UICollectionViewDataSource {
+        self
     }
 }
