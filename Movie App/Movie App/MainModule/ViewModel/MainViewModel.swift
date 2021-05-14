@@ -10,6 +10,7 @@ import Foundation
 final class MainViewModel: MainViewModelType {
     private var selectedIndexPath: IndexPath?
     var networkService: NetworkServiceProtocol?
+    var coreDataService: CoreDataService?
     var film: Film?
     var films: [FilmResult]?
 
@@ -27,12 +28,26 @@ final class MainViewModel: MainViewModelType {
     }
 
     func getFilm(category: MovieCategory, completion: @escaping () -> ()) {
+        coreDataService?.fetch(for: category) { [weak self] filmResult in
+            self?.films = filmResult
+            completion()
+        }
         networkService?.getFilms(category: category) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case let .success(film):
                     self?.film = film
                     self?.films = film.results
+                    self?.coreDataService?.performSave { context in
+                        for film in film.results {
+                            let filmEntity = FilmResultDB(context: context)
+                            filmEntity.backdropPath = film.backdropPath
+                            filmEntity.id = Int64(film.id)
+                            filmEntity.overview = film.overview
+                            filmEntity.title = film.title
+                            filmEntity.voteAverage = film.voteAverage
+                        }
+                    }
                     completion()
                 case let .failure(error):
                     print(error.localizedDescription)
@@ -41,7 +56,8 @@ final class MainViewModel: MainViewModelType {
         }
     }
 
-    init(networkService: NetworkServiceProtocol) {
+    init(networkService: NetworkServiceProtocol, coreDataService: CoreDataService) {
         self.networkService = networkService
+        self.coreDataService = coreDataService
     }
 }

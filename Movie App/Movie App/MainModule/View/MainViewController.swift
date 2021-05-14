@@ -7,6 +7,7 @@ final class MainViewController: UITableViewController {
     private var viewModel: MainViewModelType?
 
     weak var coordinator: MainCoordinator?
+    weak var coreDataService: CoreDataService?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +22,10 @@ final class MainViewController: UITableViewController {
         tableView.register(FilmTableViewCell.self, forCellReuseIdentifier: FilmTableViewCell.identifier)
         title = "Netflix"
         navigationController?.navigationBar.prefersLargeTitles = true
-        viewModel = MainViewModel(networkService: NetworkService())
+        viewModel = MainViewModel(
+            networkService: NetworkService(),
+            coreDataService: coreDataService ?? CoreDataService()
+        )
     }
 
     private func getFilm() {

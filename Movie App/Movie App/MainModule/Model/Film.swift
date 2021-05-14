@@ -17,29 +17,29 @@ struct Film: Codable {
 
 /// Model of film results
 struct FilmResult: Codable {
-    let adult: Bool
     let backdropPath: String
-    let genreIDS: [Int]
     let id: Int
-    let originalLanguage, originalTitle, overview: String
-    let popularity: Double
-    let posterPath, releaseDate, title: String
-    let video: Bool
+    let originalTitle, overview: String
+    let releaseDate, title: String
     let voteAverage: Double
-    let voteCount: Int
 
     enum CodingKeys: String, CodingKey {
-        case adult
         case backdropPath = "backdrop_path"
-        case genreIDS = "genre_ids"
         case id
-        case originalLanguage = "original_language"
         case originalTitle = "original_title"
-        case overview, popularity
-        case posterPath = "poster_path"
+        case overview
         case releaseDate = "release_date"
-        case title, video
+        case title
         case voteAverage = "vote_average"
-        case voteCount = "vote_count"
+    }
+
+    internal init(filmResultDB: FilmResultDB) {
+        backdropPath = filmResultDB.backdropPath
+        id = Int(filmResultDB.id)
+        originalTitle = filmResultDB.originalTitle
+        overview = filmResultDB.overview
+        releaseDate = filmResultDB.releaseDate
+        title = filmResultDB.title
+        voteAverage = filmResultDB.voteAverage
     }
 }

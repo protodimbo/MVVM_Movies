@@ -18,9 +18,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         let navController = UINavigationController()
+        let coreDataService = CoreDataService()
         let assemblyBuilder = AssemblyModuleBuilder()
         coordinator = MainCoordinator(navigationController: navController, assemblyBuilder: assemblyBuilder)
-        coordinator?.start()
+        coordinator?.start(coreDataService: coreDataService)
         window?.rootViewController = navController
         window?.makeKeyAndVisible()
     }
