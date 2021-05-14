@@ -5,6 +5,7 @@ import UIKit
 /// SceneDelegate
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
+    var coordinator: MainCoordinator?
 
     func scene(
         _ scene: UIScene,
@@ -16,9 +17,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let mainVC = MainViewController()
-        let navVC = UINavigationController(rootViewController: mainVC)
-        window?.rootViewController = navVC
+        let navController = UINavigationController()
+        let coreDataService = CoreDataService()
+        let assemblyBuilder = AssemblyModuleBuilder()
+        coordinator = MainCoordinator(navigationController: navController, assemblyBuilder: assemblyBuilder)
+        coordinator?.start(coreDataService: coreDataService)
+        window?.rootViewController = navController
         window?.makeKeyAndVisible()
     }
 
