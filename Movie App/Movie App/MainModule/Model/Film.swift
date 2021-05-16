@@ -5,7 +5,7 @@ import Foundation
 /// Film model
 struct Film: Codable {
     let page: Int
-    let results: [FilmResult]
+    var results: [FilmResult]
     let totalPages, totalResults: Int
 
     enum CodingKeys: String, CodingKey {
@@ -33,7 +33,25 @@ struct FilmResult: Codable {
         case voteAverage = "vote_average"
     }
 
-    internal init(filmResultDB: FilmResultDB) {
+    init(
+        backdropPath: String,
+        id: Int,
+        originalTitle: String,
+        overview: String,
+        releaseDate: String,
+        title: String,
+        voteAverage: Double
+    ) {
+        self.backdropPath = backdropPath
+        self.id = id
+        self.originalTitle = originalTitle
+        self.overview = overview
+        self.releaseDate = releaseDate
+        self.title = title
+        self.voteAverage = voteAverage
+    }
+
+    init(filmResultDB: FilmResultDB) {
         backdropPath = filmResultDB.backdropPath
         id = Int(filmResultDB.id)
         originalTitle = filmResultDB.originalTitle

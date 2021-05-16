@@ -8,7 +8,12 @@
 import CoreData
 import Foundation
 
-final class CoreDataService {
+protocol DataBaseProtocol {
+    func performSave(_ block: (NSManagedObjectContext) -> ())
+    func fetch(for category: MovieCategory, completion: ([FilmResult]?) -> ())
+}
+
+final class CoreDataService: DataBaseProtocol {
     var didUpdateDataBase: ((CoreDataService) -> ())?
 
     private var storeURL: URL = {

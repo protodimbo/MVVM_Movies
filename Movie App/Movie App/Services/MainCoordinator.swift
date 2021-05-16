@@ -17,7 +17,7 @@ final class MainCoordinator: Coordinator {
         self.assemblyBuilder = assemblyBuilder
     }
 
-    func start(coreDataService: CoreDataService) {
+    func start(coreDataService: DataBaseProtocol) {
         let mainViewController = assemblyBuilder.createMainModule(coordinator: self, coreDataService: coreDataService)
         navigationController.pushViewController(mainViewController, animated: false)
     }
