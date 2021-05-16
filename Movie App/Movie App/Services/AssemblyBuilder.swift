@@ -8,7 +8,7 @@
 import UIKit
 
 protocol AssemblyBuilderProtocol {
-    func createMainModule(coordinator: MainCoordinator, coreDataService: CoreDataService) -> UIViewController
+    func createMainModule(coordinator: MainCoordinator, coreDataService: DataBaseProtocol) -> UIViewController
     func createDetailModule(film: FilmResult?) -> UIViewController
     // TODO: Replace MAinCoordinator with coordinator
 }
@@ -18,7 +18,7 @@ final class AssemblyModuleBuilder: AssemblyBuilderProtocol {
     private let photoService = PhotoService()
     private let coreDataService = CoreDataService()
 
-    func createMainModule(coordinator: MainCoordinator, coreDataService: CoreDataService) -> UIViewController {
+    func createMainModule(coordinator: MainCoordinator, coreDataService: DataBaseProtocol) -> UIViewController {
         let view = MainViewController()
         view.coordinator = coordinator
         return view
