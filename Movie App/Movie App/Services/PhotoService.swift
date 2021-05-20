@@ -8,9 +8,9 @@
 import UIKit
 
 final class PhotoService {
-    private let cacheLifetime: TimeInterval = 60 * 60 * 24 * 7
+    // MARK: - Private Properties
 
-    // MARK: - Helpers
+    private let cacheLifetime: TimeInterval = 60 * 60 * 24 * 7
 
     private static let pathName: String = {
         let pathName = "images"
@@ -24,6 +24,18 @@ final class PhotoService {
 
         return pathName
     }()
+
+    // MARK: - Public Methods
+
+    func getPhoto(path: String, completionHandler: @escaping (UIImage) -> Void) {
+        if let photo = getImageFromCache(path: path) {
+            completionHandler(photo)
+        } else {
+            loadPhoto(by: path, completionHandler: completionHandler)
+        }
+    }
+
+    // MARK: - Private Methods
 
     private func getFilePath(path: String) -> String? {
         guard let cacheDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
@@ -63,15 +75,5 @@ final class PhotoService {
         guard let url = urlComponents.url, let data = try? Data(contentsOf: url),
               let image = UIImage(data: data) else { return }
         completionHandler(image)
-    }
-
-    // MARK: - API
-
-    func getPhoto(path: String, completionHandler: @escaping (UIImage) -> Void) {
-        if let photo = getImageFromCache(path: path) {
-            completionHandler(photo)
-        } else {
-            loadPhoto(by: path, completionHandler: completionHandler)
-        }
     }
 }

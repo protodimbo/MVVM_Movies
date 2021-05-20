@@ -14,7 +14,11 @@ protocol DataBaseProtocol {
 }
 
 final class CoreDataService: DataBaseProtocol {
+    // MARK: - Public Properties
+
     var didUpdateDataBase: ((CoreDataService) -> ())?
+
+    // MARK: - Private Properties
 
     private var storeURL: URL = {
         guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).last

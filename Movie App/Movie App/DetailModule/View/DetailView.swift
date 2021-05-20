@@ -21,7 +21,19 @@ final class DetailView: UIView {
         }
     }
 
-    private(set) var detailTableView = UITableView()
+    // MARK: - Private Properties
+
+    private(set) var detailTableView: UITableView = {
+        let table = UITableView()
+        table.register(
+            DetailPhotosScrollViewTableViewCell.self,
+            forCellReuseIdentifier: DetailPhotosScrollViewTableViewCell.identifier
+        )
+        table.register(DetailTitleTableViewCell.self, forCellReuseIdentifier: DetailTitleTableViewCell.identifier)
+        table.register(DetailInfoTableViewCell.self, forCellReuseIdentifier: DetailInfoTableViewCell.identifier)
+        table.backgroundColor = .systemBackground
+        return table
+    }()
 
     // MARK: - View life cycle
 
@@ -38,9 +50,10 @@ final class DetailView: UIView {
         )
     }
 
+    // MARK: - Initializers
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        config()
     }
 
     @available(*, unavailable)
@@ -49,26 +62,6 @@ final class DetailView: UIView {
     }
 
     // MARK: - Private methods
-
-    private func config() {
-        detailTableView.backgroundColor = .systemBackground
-        setupDetailTableView()
-    }
-
-    private func setupDetailTableView() {
-        detailTableView.register(
-            DetailPhotosScrollViewTableViewCell.self,
-            forCellReuseIdentifier: DetailPhotosScrollViewTableViewCell.identifier
-        )
-        detailTableView.register(
-            DetailTitleTableViewCell.self,
-            forCellReuseIdentifier: DetailTitleTableViewCell.identifier
-        )
-        detailTableView.register(
-            DetailInfoTableViewCell.self,
-            forCellReuseIdentifier: DetailInfoTableViewCell.identifier
-        )
-    }
 
     private func setupDelegate() {
         detailTableView.delegate = delegate?.setupTableViewDelegate()

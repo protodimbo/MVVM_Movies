@@ -8,8 +8,7 @@
 import UIKit
 
 final class TableViewCellViewModel: TableViewCellViewModelType {
-    private var film: FilmResult
-    private var photoService = PhotoService()
+    // MARK: - Public Properties
 
     var voteAverage: Double {
         film.voteAverage
@@ -83,6 +82,13 @@ final class TableViewCellViewModel: TableViewCellViewModelType {
             return UIImage(named: "0")
         }
     }
+
+    // MARK: - Private Properties
+
+    private var film: FilmResult
+    private var photoService = PhotoService()
+
+    // MARK: - Initializers
 
     init(film: FilmResult) {
         self.film = film

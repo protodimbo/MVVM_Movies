@@ -4,6 +4,8 @@ import UIKit
 
 /// Custom table view cell
 final class FilmTableViewCell: UITableViewCell {
+    // MARK: - Public Properties
+
     static let identifier = "FilmTableViewCell"
     weak var viewModel: TableViewCellViewModelType? {
         willSet(viewModel) {
@@ -15,6 +17,8 @@ final class FilmTableViewCell: UITableViewCell {
             dateLabel.text = "Вышел: \(viewModel.releaseDate.replacingOccurrences(of: "-", with: "/"))"
         }
     }
+
+    // MARK: - Private Properties
 
     private let filmImageView: UIImageView = {
         let imageView = UIImageView()
@@ -51,6 +55,8 @@ final class FilmTableViewCell: UITableViewCell {
         return label
     }()
 
+    // MARK: - Initializers
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(filmImageView)
@@ -66,12 +72,16 @@ final class FilmTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
         selectionStyle = .none
     }
+
+    // MARK: - Private Methods
 
     private func layoutConstraints() {
         layoutFilmImageViewConstraints()

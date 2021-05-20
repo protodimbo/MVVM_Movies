@@ -10,13 +10,16 @@ import UIKit
 protocol AssemblyBuilderProtocol {
     func createMainModule(coordinator: MainCoordinator, coreDataService: DataBaseProtocol) -> UIViewController
     func createDetailModule(film: FilmResult?) -> UIViewController
-    // TODO: Replace MAinCoordinator with coordinator
 }
 
 final class AssemblyModuleBuilder: AssemblyBuilderProtocol {
+    // MARK: - Private Properties
+
     private let networkService = NetworkService()
     private let photoService = PhotoService()
     private let coreDataService = CoreDataService()
+
+    // MARK: - Public Methods
 
     func createMainModule(coordinator: MainCoordinator, coreDataService: DataBaseProtocol) -> UIViewController {
         let view = MainViewController()

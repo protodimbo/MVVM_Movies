@@ -10,6 +10,8 @@ import UIKit
 final class DetailPhotosScrollViewTableViewCell: UITableViewCell {
     static let identifier = "DetailPhotosScrollViewTableViewCell"
 
+    // MARK: - Public Properties
+
     var viewModel: DetailPhotoViewModel? {
         didSet(viewModel) {
             guard let viewModel = viewModel else { return }
@@ -17,15 +19,21 @@ final class DetailPhotosScrollViewTableViewCell: UITableViewCell {
         }
     }
 
+    // MARK: - PRivate Properties
+
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.isPagingEnabled = true
         return scrollView
     }()
 
+    // MARK: - Public Methods
+
     func configure(images: [UIImage?]) {
         setup(with: images)
     }
+
+    // MARK: - Private Methods
 
     private func setup(with images: [UIImage?]) {
         configureScrollView(

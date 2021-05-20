@@ -9,9 +9,13 @@ import UIKit
 
 /// Detail vc
 final class DetailViewController: UIViewController {
+    // MARK: - Private Properties
+
     private var viewModel: DetailPhotoViewModelType?
 
     private var detailTableView = DetailView(frame: .zero)
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,18 +25,22 @@ final class DetailViewController: UIViewController {
         getPosters()
     }
 
+    // MARK: - Public Methods
+
+    func inject(viewModel: DetailPhotoViewModelType) {
+        self.viewModel = viewModel
+    }
+
+    // MARK: - Private Methods
+
     private func getPosters() {
         viewModel?.getPosters { [weak self] in
             self?.detailTableView.detailTableView.reloadData()
         }
     }
-
-    func inject(viewModel: DetailPhotoViewModelType) {
-        self.viewModel = viewModel
-    }
 }
 
-// MARK: - MovieDetailsViewDelegate
+// MARK: - Extensions
 
 extension DetailViewController: DetailViewDelegate {
     func setupTableViewDelegate() -> UITableViewDelegate {

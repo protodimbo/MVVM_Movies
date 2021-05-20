@@ -8,11 +8,26 @@
 import UIKit
 
 final class DetailPhotoViewModel: DetailPhotoViewModelType {
+    // MARK: - Public Properties
+
+    var images: [UIImage?] = []
+    var film: FilmResult?
+
+    // MARK: - Private Properties
+
     private var photoService: PhotoService?
     private var networkService: NetworkServiceProtocol?
     private var posters: [Posters]?
-    var images: [UIImage?] = []
-    var film: FilmResult?
+
+    // MARK: - Initializers
+
+    init(networkService: NetworkServiceProtocol, photoService: PhotoService, film: FilmResult?) {
+        self.networkService = networkService
+        self.photoService = photoService
+        self.film = film
+    }
+
+    // MARK: - Public Methods
 
     func getPosters(completion: @escaping () -> ()) {
         networkService?.getImages(for: String(film?.id ?? 0)) { [weak self] result in
@@ -39,11 +54,5 @@ final class DetailPhotoViewModel: DetailPhotoViewModelType {
                 group.leave()
             }
         }
-    }
-
-    init(networkService: NetworkServiceProtocol, photoService: PhotoService, film: FilmResult?) {
-        self.networkService = networkService
-        self.photoService = photoService
-        self.film = film
     }
 }

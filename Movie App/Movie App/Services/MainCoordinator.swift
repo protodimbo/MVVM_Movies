@@ -8,14 +8,23 @@
 import UIKit
 
 final class MainCoordinator: Coordinator {
-    private var assemblyBuilder: AssemblyBuilderProtocol
+    // MARK: - Public Properties
+
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
+
+    // MARK: - Private Properties
+
+    private var assemblyBuilder: AssemblyBuilderProtocol
+
+    // MARK: - Initializers
 
     init(navigationController: UINavigationController, assemblyBuilder: AssemblyBuilderProtocol) {
         self.navigationController = navigationController
         self.assemblyBuilder = assemblyBuilder
     }
+
+    // MARK: - Public Methods
 
     func start(coreDataService: DataBaseProtocol) {
         let mainViewController = assemblyBuilder.createMainModule(coordinator: self, coreDataService: coreDataService)

@@ -13,6 +13,8 @@ protocol NetworkServiceProtocol {
 }
 
 final class NetworkService: NetworkServiceProtocol {
+    // MARK: - Public Methods
+
     func getFilms(category: MovieCategory, completion: @escaping (Result<Film, Error>) -> Void) {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"

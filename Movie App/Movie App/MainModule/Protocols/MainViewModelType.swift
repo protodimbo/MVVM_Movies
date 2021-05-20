@@ -14,6 +14,4 @@ protocol MainViewModelType {
 
     func selectRow(at indexPath: IndexPath)
     func getFilm(category: MovieCategory, completion: @escaping () -> ())
-
-    init(networkService: NetworkServiceProtocol, coreDataService: CoreDataService)
 }

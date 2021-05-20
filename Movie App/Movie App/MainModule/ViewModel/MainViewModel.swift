@@ -8,11 +8,25 @@
 import Foundation
 
 final class MainViewModel: MainViewModelType {
-    private var selectedIndexPath: IndexPath?
+    // MARK: - Public Properties
+
     var networkService: NetworkServiceProtocol?
     var coreDataService: CoreDataService?
     var film: Film?
     var films: [FilmResult]?
+
+    // MARK: - Private Properties
+
+    private var selectedIndexPath: IndexPath?
+
+    // MARK: - Initializers
+
+    init(networkService: NetworkServiceProtocol, coreDataService: CoreDataService) {
+        self.networkService = networkService
+        self.coreDataService = coreDataService
+    }
+
+    // MARK: - Public Methods
 
     func nuberOfRows() -> Int {
         film?.results.count ?? 0
@@ -54,10 +68,5 @@ final class MainViewModel: MainViewModelType {
                 }
             }
         }
-    }
-
-    init(networkService: NetworkServiceProtocol, coreDataService: CoreDataService) {
-        self.networkService = networkService
-        self.coreDataService = coreDataService
     }
 }

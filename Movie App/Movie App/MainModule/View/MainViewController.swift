@@ -4,10 +4,16 @@ import UIKit
 
 /// Main screen of the app
 final class MainViewController: UITableViewController {
-    private var viewModel: MainViewModelType?
+    // MARK: - Public Properties
 
     weak var coordinator: MainCoordinator?
     weak var coreDataService: CoreDataService?
+
+    // MARK: - Private Properties
+
+    private var viewModel: MainViewModelType?
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -15,6 +21,8 @@ final class MainViewController: UITableViewController {
         configureMainScreen()
         getFilm()
     }
+
+    // MARK: - Private Methods
 
     private func configureMainScreen() {
         tableView.delegate = self
@@ -33,6 +41,8 @@ final class MainViewController: UITableViewController {
             self?.tableView.reloadData()
         }
     }
+
+    // MARK: - Table View Methods
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel?.nuberOfRows() ?? 0
@@ -60,7 +70,6 @@ final class MainViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let categoryView = CategoryView()
         categoryView.delegate = self
-        categoryView.config()
         return categoryView
     }
 
@@ -68,6 +77,8 @@ final class MainViewController: UITableViewController {
         50
     }
 }
+
+// MARK: - Extensions
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
